@@ -6,8 +6,8 @@
 # d is calculated as  d*e mod m = 1
 # public key is (e, n)
 # private key is (d, n)
-# RSA encrypt is C = P&e mod n
-# RSA decrypt is P = C&d mod n
+# RSA encrypt is C = P^e mod n
+# RSA decrypt is P = C^d mod n
 
 import random
 
@@ -63,20 +63,46 @@ def coprimes(m):
   return(e)
 
 def calculate_d(e,m):
-  for i in range(1,m):
-    if (e*i)%m == 1:
-      return(i)
+  for d in range(1,5*m):
+    if (e*d)%m == 1:
+      if e == d:
+        d += 1
+      else:
+        return(d)
+
+def rsa_encrypt(plaintext,e,n):
+  # RSA encrypt is C = P^e mod n
+  test = [ord(c) for c in plaintext]
+  print(test)
+  ciphertext = [((ord(c)**e) % n) for c in plaintext]
+  print(ciphertext)
+  return(ciphertext)
+
+def rsa_decrypt(ciphertext,d,n):
+  # RSA decrypt is P = C^d mod n
+  plaintext = [chr((c**d) % n) for c in ciphertext]
+  print(plaintext)
+  plaintext = "".join(plaintext)
+  print(plaintext)
+  return(plaintext)
   
 def rsa_function():
   # request prime numbers p and q for input
   p,q = prime_input()
+  print(f"The value for p is {p}.")
+  print(f"The value for q is {q}.")
   n = p * q
+  print(f"The value for n is {n}.")
   m = (p-1)*(q-1)
+  print(f"The value for m is {m}.")
   e = coprimes(m)
-  print(e)
+  print(f"The value for e is {e}.")
   d = calculate_d(e, m)
-  print(d)
+  print(f"The value for d is {d}.")
   print(f"The public key is ({e},{n}).")
   print(f"The private key is ({d},{n}).")
+  plaintext = input("Please enter your message: ")
+  ciphertext = rsa_encrypt(plaintext,e,n)
+  plaintext = rsa_decrypt(ciphertext,d,n)
 
 rsa_function()
