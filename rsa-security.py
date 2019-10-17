@@ -14,7 +14,7 @@ import random
 def prime_input():
   while (True):
     try:
-      p = input("Please provide the first prime number: ")
+      p = input("Please provide the first prime number (p >= 11): ")
       p = int(p)
       if (prime_test(p) == True):
         break
@@ -23,9 +23,11 @@ def prime_input():
   
   while (True):  
     try:
-      q = input("Please provide the second prime number: ")
+      q = input("Please provide the second prime number that is a different value (q >= 11): ")
       q = int(q)
-      if (prime_test(q) == True):
+      if (q == p):
+        print("Q must be a different value than P.")
+      if (prime_test(q) == True and q != p):
         break
     except ValueError:
       print("The input was not a valid integer.")
@@ -33,15 +35,18 @@ def prime_input():
     
 def prime_test(num):
   # test if a number is prime
-  if (num > 1):
-      for i in range(2,num):
-          if (num % i) == 0:
-              print(num, "is not a prime number.")
-              print(i, "times", num//i, "is", str(num) + ".")
-              return False
-      else:
-          print(num, "is a prime number.")
-          return True
+  if (num >= 11):
+    for i in range(2,num):
+        if (num % i) == 0:
+            print(num, "is not a prime number.")
+            print(i, "times", num//i, "is", str(num) + ".")
+            return False
+    else:
+        print(num, "is a prime number.")
+        return True
+  elif (num < 11):
+    print(num, "is too small of a number. Please pick a larger prime number.")
+    return False
   else:
       print(num, "is not a prime number.")
       return False
@@ -58,7 +63,6 @@ def coprimes(m):
   for i in range(2,m):
     if gcd(i,m) == 1:
       e_list.append(i)
-  print(e_list)
   e = random.choice(e_list)
   return(e)
 
@@ -73,17 +77,15 @@ def calculate_d(e,m):
 def rsa_encrypt(plaintext,e,n):
   # RSA encrypt is C = P^e mod n
   test = [ord(c) for c in plaintext]
-  print(test)
   ciphertext = [((ord(c)**e) % n) for c in plaintext]
-  print(ciphertext)
+  print("Your encoded message is:", ciphertext)
   return(ciphertext)
 
 def rsa_decrypt(ciphertext,d,n):
   # RSA decrypt is P = C^d mod n
   plaintext = [chr((c**d) % n) for c in ciphertext]
-  print(plaintext)
   plaintext = "".join(plaintext)
-  print(plaintext)
+  print("Your plaintext message was:", plaintext)
   return(plaintext)
   
 def rsa_function():
@@ -101,7 +103,7 @@ def rsa_function():
   print(f"The value for d is {d}.")
   print(f"The public key is ({e},{n}).")
   print(f"The private key is ({d},{n}).")
-  plaintext = input("Please enter your message: ")
+  plaintext = input("Please enter your message:")
   ciphertext = rsa_encrypt(plaintext,e,n)
   plaintext = rsa_decrypt(ciphertext,d,n)
 
