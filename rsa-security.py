@@ -78,14 +78,14 @@ def rsa_encrypt(plaintext,e,n):
   # RSA encrypt is C = P^e mod n
   test = [ord(c) for c in plaintext]
   ciphertext = [((ord(c)**e) % n) for c in plaintext]
-  print("Your encoded message is:", ciphertext)
+  print("Your encoded message is: ", ciphertext)
   return(ciphertext)
 
 def rsa_decrypt(ciphertext,d,n):
   # RSA decrypt is P = C^d mod n
   plaintext = [chr((c**d) % n) for c in ciphertext]
   plaintext = "".join(plaintext)
-  print("Your plaintext message was:", plaintext)
+  print("Your plaintext message was: ", plaintext)
   return(plaintext)
   
 def rsa_function():
@@ -103,7 +103,7 @@ def rsa_function():
   print(f"The value for d is {d}.")
   print(f"The public key is ({e},{n}).")
   print(f"The private key is ({d},{n}).")
-  plaintext = input("Please enter your message:")
+  plaintext = input("Please enter your message: ")
   ciphertext = rsa_encrypt(plaintext,e,n)
   plaintext = rsa_decrypt(ciphertext,d,n)
 
