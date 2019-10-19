@@ -84,14 +84,14 @@ def calculate_d(e,m):
 # RSA encrypt is C = P^e mod n
 def rsa_encrypt(plaintext,e,n):
   ciphertext = [((ord(c)**e) % n) for c in plaintext]
-  print("Your encoded message is: ", ciphertext)
+  print("Your encoded message is:", ciphertext)
   return(ciphertext)
 
 # RSA decrypt is P = C^d mod n
 def rsa_decrypt(ciphertext,d,n):
   plaintext = [chr((c**d) % n) for c in ciphertext]
   plaintext = "".join(plaintext)
-  print("Your plaintext message was: ", plaintext)
+  print("Your plaintext message was:", plaintext)
   return(plaintext)
   
 # main function
