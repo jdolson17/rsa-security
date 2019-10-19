@@ -11,6 +11,7 @@
 
 import random
 
+# request for the prime numbers p and q
 def prime_input():
   while (True):
     try:
@@ -32,7 +33,9 @@ def prime_input():
     except ValueError:
       print("The input was not a valid integer.")
   return p,q
-    
+
+# test to see if the input are prime numbers and if they are greater than or equal to 11 since
+# numbers smaller than 11 do not work properly with RSA
 def prime_test(num):
   # test if a number is prime
   if (num >= 11):
@@ -51,12 +54,15 @@ def prime_test(num):
       print(num, "is not a prime number.")
       return False
 
+# find the greatest common denominator between two numbers
 def gcd(x,y):
   if(y==0): 
        return x
   else:
        return gcd(y,x%y)
 
+# find the coprimes for the number and generate a list of possible e values
+# the value for e is randomly selected
 def coprimes(m):
   e_list = []
   # create list of options for e, coprime numbers of m
@@ -66,6 +72,7 @@ def coprimes(m):
   e = random.choice(e_list)
   return(e)
 
+# calculate the value for d
 def calculate_d(e,m):
   for d in range(1,5*m):
     if (e*d)%m == 1:
@@ -74,37 +81,49 @@ def calculate_d(e,m):
       else:
         return(d)
 
+# RSA encrypt is C = P^e mod n
 def rsa_encrypt(plaintext,e,n):
-  # RSA encrypt is C = P^e mod n
-  test = [ord(c) for c in plaintext]
   ciphertext = [((ord(c)**e) % n) for c in plaintext]
   print("Your encoded message is: ", ciphertext)
   return(ciphertext)
 
+# RSA decrypt is P = C^d mod n
 def rsa_decrypt(ciphertext,d,n):
-  # RSA decrypt is P = C^d mod n
   plaintext = [chr((c**d) % n) for c in ciphertext]
   plaintext = "".join(plaintext)
   print("Your plaintext message was: ", plaintext)
   return(plaintext)
   
+# main function
 def rsa_function():
   # request prime numbers p and q for input
   p,q = prime_input()
   print(f"The value for p is {p}.")
   print(f"The value for q is {q}.")
+  
+  # calculate n
   n = p * q
   print(f"The value for n is {n}.")
+  
+  # calculate m
   m = (p-1)*(q-1)
   print(f"The value for m is {m}.")
+  
+  # calculate e
   e = coprimes(m)
   print(f"The value for e is {e}.")
+
+  # calculate d
   d = calculate_d(e, m)
   print(f"The value for d is {d}.")
   print(f"The public key is ({e},{n}).")
   print(f"The private key is ({d},{n}).")
+
+  # request a message that will be converted to ciphertext then converted
+  # back to plaintext
   plaintext = input("Please enter your message: ")
   ciphertext = rsa_encrypt(plaintext,e,n)
   plaintext = rsa_decrypt(ciphertext,d,n)
 
+# run the program
 rsa_function()
